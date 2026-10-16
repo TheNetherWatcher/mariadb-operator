@@ -204,3 +204,5 @@ spec:
 ```
 
 There isn't an universally correct default value for these thresholds, so we recommend determining your own based on factors like the compute resources, network, storage, and other aspects of the environment where your `MariaDB` and `MaxScale` instances are running.
+
+When the data-plane agent probes are not in use (standalone `MariaDB` instances, or replication with `standaloneProbes: true`), the default probe runs `SELECT 1` as the `healthcheck` user from `/var/lib/mysql/.my-healthcheck.cnf`, falling back to the root user if that file is missing or its credentials are stale. This keeps the probe working across root password rotation and restores.
