@@ -34,7 +34,8 @@ func TestMariadbStartupProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							"{ [ -f /var/lib/mysql/.my-healthcheck.cnf ] && mariadb --defaults-extra-file=/var/lib/mysql/.my-healthcheck.cnf " +
+								"-e \"SELECT 1;\"; } || mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
 						},
 					},
 				},
@@ -62,7 +63,7 @@ func TestMariadbStartupProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},
@@ -227,7 +228,7 @@ func TestMariadbStartupProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},
@@ -366,7 +367,7 @@ func TestMariadbLivenessProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},
@@ -394,7 +395,7 @@ func TestMariadbLivenessProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},
@@ -556,7 +557,7 @@ func TestMariadbLivenessProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},
@@ -693,7 +694,7 @@ func TestMariadbReadinessProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},
@@ -721,7 +722,7 @@ func TestMariadbReadinessProbe(t *testing.T) {
 						Command: []string{
 							"bash",
 							"-c",
-							"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+							defaultProbeCommand,
 						},
 					},
 				},

@@ -39,13 +39,21 @@ var (
 	ABSStorageAccountName = "MARIADB_OPERATOR_ABS_STORAGE_ACCOUNT_NAME"
 	ABSCAPath             = "MARIADB_OPERATOR_ABS_CA_PATH"
 
+	// Prefer the healthcheck user, which survives root password rotation and restores,
+	// falling back to root when its credentials file is missing or stale.
+	healthcheckCnfPath  = filepath.Join(MariadbStorageMountPath, ".my-healthcheck.cnf")
+	defaultProbeCommand = fmt.Sprintf(
+		"{ [ -f %[1]s ] && mariadb --defaults-extra-file=%[1]s -e \"SELECT 1;\"; } || "+
+			"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+		healthcheckCnfPath,
+	)
 	defaultProbe = corev1.Probe{
 		ProbeHandler: corev1.ProbeHandler{
 			Exec: &corev1.ExecAction{
 				Command: []string{
 					"bash",
 					"-c",
-					"mariadb -u root -p\"${MARIADB_ROOT_PASSWORD}\" -e \"SELECT 1;\"",
+					defaultProbeCommand,
 				},
 			},
 		},
